@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .post {
+            border: 3px solid rgba(16, 47, 65, 0.38);
+            border-radius: 10px;
+            padding: 10px;
+            margin: 5px;
+            background: rgba(197, 226, 214, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <h2>Posts</h2>
+    <h5>data fetched from <a href="https://jsonplaceholder.typicode.com/posts">https://jsonplaceholder.typicode.com/posts</a></h5>
+
+    <h3>Filter</h3>
+    <form>
+        userId: <input type="number" id="userId" onchange="postFilter(this.value, document.getElementById('id').value)"
+                       onkeyup="postFilter(this.value, document.getElementById('id').value)">
+        id: <input type="number" id="id" onchange="postFilter(document.getElementById('userId').value, this.value)"
+                   onkeyup="postFilter(document.getElementById('userId').value, this.value)">
+    </form>
+    <br>
+    <div id="posts">
+    </div>
+
+</body>
+</html>
+
+<script>
+    var xmlhttp = new XMLHttpRequest();
+    var myObj = "";
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            myObj = JSON.parse(this.responseText);
+            postFilter("", "");
+        }
+    };
+    xmlhttp.open("GET", 'https://jsonplaceholder.typicode.com/posts', true);
+    xmlhttp.send();
+
+    function postFilter(userId, id) {
+        document.getElementById("posts").innerHTML = '';
+        for (i in myObj) {
+            if ((userId === "" || userId == myObj[i]['userId']) &&
+                (id === "" || id == myObj[i]['id'])) {
+                var node = document.createElement("div");
+                node.setAttribute("class", "post");
+                node.innerHTML = postDiv(myObj[i]['userId'], myObj[i]['id'],
+                                         myObj[i]['title'], myObj[i]['body']);
+                document.getElementById("posts").appendChild(node);
+            }
+        }
+    }
+
+    function postDiv(userId, id, title, body) {
+        return '<h2>' + title + '</h2>' +
+                '<h5>userId: ' + userId + ' id: ' + id + '</h5>' +
+                '<p>' + body + '</p>';
+    }
+</script>
