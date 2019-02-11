@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Test DOM</title>
     <style>
         .post {
             border: 3px solid rgba(16, 47, 65, 0.38);
@@ -33,7 +33,7 @@
 
 <script>
     var xmlhttp = new XMLHttpRequest();
-    var myObj = "";
+    var myObj;
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             myObj = JSON.parse(this.responseText);
@@ -48,6 +48,7 @@
         for (i in myObj) {
             if ((userId === "" || userId == myObj[i]['userId']) &&
                 (id === "" || id == myObj[i]['id'])) {
+
                 var node = document.createElement("div");
                 node.setAttribute("class", "post");
                 node.innerHTML = postDiv(myObj[i]['userId'], myObj[i]['id'],
